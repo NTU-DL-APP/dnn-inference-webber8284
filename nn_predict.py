@@ -6,13 +6,18 @@ def relu(x):
     return np.maximum(0, x)
 
 def softmax(x):
-    x = np.array(x)  # 不強制轉 float64，避免 autograder 判定不一致
+    x = np.asarray(x)
     if x.ndim == 1:
-        e_x = np.exp(x - np.max(x))
-        return e_x / np.sum(e_x)
+        x = x - np.max(x)
+        exps = np.exp(x)
+        return exps / np.sum(exps)
+    elif x.ndim == 2:
+        x = x - np.max(x, axis=1, keepdims=True)
+        exps = np.exp(x)
+        return exps / np.sum(exps, axis=1, keepdims=True)
     else:
-        e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
-        return e_x / np.sum(e_x, axis=1, keepdims=True)
+        raise ValueError("softmax only supports 1D or 2D input.")
+
 
 # === Flatten ===
 def flatten(x):
