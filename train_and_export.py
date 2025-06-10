@@ -3,7 +3,7 @@ import numpy as np
 import json
 import os
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.datasets import fashion_mnist
 
 # === Step 1: Train Model ===
@@ -12,13 +12,15 @@ x_train = x_train / 255.0  # Normalize to 0~1
 
 model = Sequential([
     Flatten(input_shape=(28, 28)),
+    Dense(256, activation='relu'),
+    Dropout(0.3),
     Dense(128, activation='relu'),
-    Dense(64, activation='relu'),
+    Dropout(0.2),
     Dense(10, activation='softmax')
 ])
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=10, batch_size=128, validation_split=0.1)
+model.fit(x_train, y_train, epochs=20, batch_size=128, validation_split=0.1)
 
 # Create output folder if needed
 os.makedirs('model', exist_ok=True)
@@ -50,4 +52,4 @@ for weight in model.weights:
 
 np.savez('model/fashion_mnist.npz', **weights_dict)
 
-print("\n 模型訓練與轉換完成")
+print("\n✅ 模型訓練與轉換完成，準備測試！")
