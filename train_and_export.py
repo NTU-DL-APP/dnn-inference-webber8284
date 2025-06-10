@@ -6,17 +6,19 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.datasets import fashion_mnist
 
-# === Step 1: Load & Normalize Data ===
+# === Step 1: Load Data ===
 (x_train, y_train), _ = fashion_mnist.load_data()
 x_train = x_train / 255.0
 
-# === Step 2: Build Model (強化版) ===
+# === Step 2: Build Stronger Model ===
 model = Sequential([
     Flatten(input_shape=(28, 28)),
-    Dense(512, activation='relu'),
-    Dropout(0.25),
-    Dense(256, activation='relu'),
-    Dropout(0.15),
+    Dense(768, activation='relu'),
+    Dropout(0.3),
+    Dense(384, activation='relu'),
+    Dropout(0.2),
+    Dense(128, activation='relu'),   # 新增
+    Dropout(0.1),                     # 新增
     Dense(10, activation='softmax')
 ])
 
@@ -24,10 +26,10 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
+# === Step 3: Train (長一點) ===
 model.fit(x_train, y_train, epochs=100, batch_size=64, validation_split=0.1)
 
-
-# === Step 4: Export model as JSON + NPZ ===
+# === Step 4: Export as .json + .npz ===
 os.makedirs('model', exist_ok=True)
 model.save('model/fashion_mnist.h5')
 
@@ -52,6 +54,7 @@ with open('model/fashion_mnist.json', 'w') as f:
 weights_dict = {}
 for weight in model.weights:
     weights_dict[weight.name] = weight.numpy()
+
 np.savez('model/fashion_mnist.npz', **weights_dict)
 
-print("\n✅ 強化版模型訓練與轉換完成，準備測試！")
+print("\n✅ 高階模型訓練與轉換完成，準備測試！")
