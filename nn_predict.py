@@ -6,9 +6,14 @@ def relu(x):
     return np.maximum(0, x)
 
 def softmax(x):
-    x = np.array(x, dtype=np.float64)  # 型別保險
-    e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum()
+    x = np.array(x, dtype=np.float64)  # 型別安全
+    if x.ndim == 1:
+        e_x = np.exp(x - np.max(x))
+        return e_x / e_x.sum()
+    else:
+        e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return e_x / e_x.sum(axis=1, keepdims=True)
+
 
 
 
