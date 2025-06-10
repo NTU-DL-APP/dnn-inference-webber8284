@@ -6,13 +6,10 @@ def relu(x):
     return np.maximum(0, x)
 
 def softmax(x):
-    x = x.astype(np.float64)  # 保險轉換型別
-    if x.ndim == 1:
-        e_x = np.exp(x - np.max(x))
-        return e_x / np.sum(e_x)
-    else:
-        e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
-        return e_x / np.sum(e_x, axis=1, keepdims=True)
+    x = np.array(x, dtype=np.float64)  # 型別保險
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
+
 
 
 
