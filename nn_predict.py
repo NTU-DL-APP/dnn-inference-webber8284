@@ -9,18 +9,22 @@ def softmax(x):
     e_x = np.exp(x - np.max(x))
     return e_x / np.sum(e_x)
 
-# === Flatten Layer ===
+
+
+# === Flatten ===
 def flatten(x):
     return x.reshape(x.shape[0], -1)
 
-# === Dense Layer ===
+# === Dense layer ===
 def dense(x, W, b):
     return x @ W + b
 
-# === Forward Pass ===
+# Infer TensorFlow h5 model using numpy
+# Support only Dense, Flatten, relu, softmax now
 def nn_forward_h5(model_arch, weights, data):
     x = data
     for layer in model_arch:
+        lname = layer['name']
         ltype = layer['type']
         cfg = layer['config']
         wnames = layer['weights']
@@ -31,13 +35,15 @@ def nn_forward_h5(model_arch, weights, data):
             W = weights[wnames[0]]
             b = weights[wnames[1]]
             x = dense(x, W, b)
-            act = cfg.get("activation", None)
-            if act == "relu":
+            if cfg.get("activation") == "relu":
                 x = relu(x)
-            elif act == "softmax":
+            elif cfg.get("activation") == "softmax":
                 x = softmax(x)
+
     return x
 
-# === Entry Point ===
+
+# You are free to replace nn_forward_h5() with your own implementation 
 def nn_inference(model_arch, weights, data):
     return nn_forward_h5(model_arch, weights, data)
+    

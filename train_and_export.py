@@ -5,7 +5,7 @@ import os
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Dropout, BatchNormalization, Activation, Reshape
 from tensorflow.keras.datasets import fashion_mnist
-from tensorflow.keras.layers import Conv2D, MaxPooling2D
+# from tensorflow.keras.layers import Conv2D, MaxPooling2D
 
 
 
@@ -15,13 +15,13 @@ x_train = x_train / 255.0
 
 # === Step 2: Stronger, Regularized Model ===
 model = Sequential([
-    Reshape((28,28,1), input_shape=(28,28)),
-    Conv2D(32, kernel_size=3, activation='relu'),
-    MaxPooling2D(pool_size=2),
-    Conv2D(64, kernel_size=3, activation='relu'),
-    MaxPooling2D(pool_size=2),
-    Flatten(),
+    Flatten(input_shape=(28, 28)),
+    Dense(768, activation='relu'),
+    Dropout(0.3),
+    Dense(384, activation='relu'),
+    Dropout(0.2),
     Dense(128, activation='relu'),
+    Dropout(0.1),
     Dense(10, activation='softmax')
 ])
 
