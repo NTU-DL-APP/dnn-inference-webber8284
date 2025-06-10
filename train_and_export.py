@@ -14,9 +14,9 @@ x_train = x_train / 255.0
 model = Sequential([
     Flatten(input_shape=(28, 28)),
     Dense(512, activation='relu'),
-    Dropout(0.3),
+    Dropout(0.25),
     Dense(256, activation='relu'),
-    Dropout(0.2),
+    Dropout(0.15),
     Dense(10, activation='softmax')
 ])
 
@@ -24,8 +24,8 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# === Step 3: Train Model ===
-model.fit(x_train, y_train, epochs=30, batch_size=128, validation_split=0.1)
+model.fit(x_train, y_train, epochs=100, batch_size=64, validation_split=0.1)
+
 
 # === Step 4: Export model as JSON + NPZ ===
 os.makedirs('model', exist_ok=True)
